@@ -79,6 +79,7 @@ VALUES
 ('I embrace the learning opportunities in every challenge.', 3)
 ('I am great at debugging.', 3)
 ('My failures do not define me.', 3)
+('Test this!', 3)
 ('I use errors to motivate me.', 3)
 ('You can and you will solve this bug.', 3)
 ('Each error is one more step closer to the goal!', 3)
@@ -105,6 +106,7 @@ VALUES
 ('I will work hard, and this test WILL pass!', 4)
 ('Take a deep breath!', 4)
 ('You can do amazing things!', 4)
+('I am in control of my happiness. Not my errors.', 4)
 
 CREATE TABLE categories (
     id BIGINT GENERTAED ALWAYS AS IDENTITY PRIMARY KEY,
