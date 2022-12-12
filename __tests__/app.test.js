@@ -26,6 +26,16 @@ describe('affirmations and category routes', () => {
     });
   });
 
+  it('GET api/v1/categories/:id should return the category with nested affirmations', async () => {
+    const res = await request(app).get('/api/v1/categories/1');
+    // expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      type: expect.any(String),
+      affirmations: expect.any(Array),
+    });
+  });
+
   afterAll(() => {
     pool.end();
   });
