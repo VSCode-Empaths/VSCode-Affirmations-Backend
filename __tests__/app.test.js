@@ -2,6 +2,7 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const Affirmation = require('../lib/models/Affirmation.js');
 
 const mockAffirmation = {
   text: 'If all else fails, I can collapse and scream 🦆',
@@ -69,14 +70,15 @@ describe('affirmations and category routes', () => {
     });
   });
 
-  /* it('DELETE /api/v1/affirmations/:id should delete an affirmation', async () => {
-    const affirmation = await affirmation.insert(mockAffirmation);
-    const resp = await app.delete(`/api/v1/affirmations/${affirmation.id}`);
-    expect(resp.status).toBe(200);
-
-    const check = await affirmation.getById(affirmation.id);
+  it('DELETE /api/v1/affirmations/:id should delete an affirmation', async () => {
+    const insertAffirmationRes = await Affirmation.insert(mockAffirmation);
+    const deleteAffirmationRes = await request(app).delete(
+      '/api/v1/affirmations/' + insertAffirmationRes.id
+    );
+    expect(deleteAffirmationRes.status).toBe(200);
+    const check = await Affirmation.getById(insertAffirmationRes.id);
     expect(check).toBeNull();
-  }); */
+  });
 
   afterAll(() => {
     pool.end();
