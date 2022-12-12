@@ -3,12 +3,12 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 
-describe('backend-express-template routes', () => {
+describe('affirmations and category routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
   it('GET api/v1/affirmations should return a list of affirmations', async () => {
-    const res = await request(app).get('/affirmations');
+    const res = await request(app).get('/api/v1/affirmations');
     expect(res.status).toBe(200);
     expect(res.body[0]).toEqual({
       id: expect.any(String),
@@ -17,6 +17,15 @@ describe('backend-express-template routes', () => {
       created_at: expect.any(String),
     });
   });
+  it('GET api/v1/categories should return a list of categories', async () => {
+    const res = await request(app).get('/api/v1/categories');
+    expect(res.status).toBe(200);
+    expect(res.body[0]).toEqual({
+      id: expect.any(String),
+      type: expect.any(String),
+    });
+  });
+
   afterAll(() => {
     pool.end();
   });
