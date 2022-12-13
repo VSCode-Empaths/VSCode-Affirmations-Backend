@@ -37,7 +37,7 @@ VALUES
 ('You are ready to learn.', 1),
 ('You are capable.', 1),
 ('Today I choose to be positive', 1),
-('I am still indepenedent, even if I ask for help.', 1),
+('I am still independent, even if I ask for help.', 1),
 ('Today is going to be a good day!', 1),
 ('Progress not perfection!', 1),
 ('You can complete difficult tasks.', 1),
