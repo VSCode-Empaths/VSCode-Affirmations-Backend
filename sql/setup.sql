@@ -99,7 +99,7 @@ VALUES
 ('Each error is one more step closer to the goal!', 3),
 ('Your value cannot be tested!', 3),
 ('If at first your test does not succeed, pick yourself up and try again!', 3),
-('The operations/infrastructure/testing teams really appreciate my assistance', 3),
+('The operations/ infrastructure/ testing teams really appreciate my assistance', 3),
 ('I am smart. I can solve this bug.', 3),
 ('My code might be ugly, but I am still beautiful', 4),
 ('It does get better. Just keep moving forward one repo at a time.', 4),
