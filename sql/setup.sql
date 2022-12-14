@@ -3,6 +3,7 @@
 DROP TABLE IF EXISTS affirmations;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS github_users CASCADE;
 
 CREATE TABLE users (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -10,6 +11,13 @@ CREATE TABLE users (
   password_hash VARCHAR NOT NULL,
   first_name VARCHAR NOT NULL,
   last_name VARCHAR NOT NULL
+);
+
+CREATE TABLE github_users (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  login TEXT NOT NULL,
+  email TEXT,
+  avatar TEXT
 );
 
 CREATE TABLE categories (
