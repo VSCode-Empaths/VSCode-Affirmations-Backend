@@ -16,7 +16,7 @@ describe('github auth routes', () => {
   it('/api/v1/github/login should redirect to the github oauth page', async () => {
     const res = await request(app).get('/api/v1/github/login');
     expect(res.header.location).toMatch(
-      /https:\/\/github.com\/login\/oauth\/authorize\?client_id=[.\w\d]+&scope=user&redirect_uri=https:\/\/error-affirmations.herokuapp.com\/api\/v1\/github\/callback/i
+      `https://github.com/login/oauth/authorize?client_id=${process.env.GH_CLIENT_ID}&scope=user&redirect_uri=${process.env.GH_REDIRECT_URI}`
     );
   });
 
