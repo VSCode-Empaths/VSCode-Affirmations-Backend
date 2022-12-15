@@ -25,14 +25,9 @@ describe('github auth routes', () => {
       .agent(app)
       .get('/api/v1/github/callback?code=42')
       .redirects(1);
-    expect(res.body).toEqual({
-      id: expect.any(String),
-      login: 'lottie_dog',
-      email: 'lottie@lottie.com',
-      avatar: 'https://www.placecage.com/gif/300/300',
-      iat: expect.any(Number),
-      exp: expect.any(Number),
-    });
+    expect(res.header.location).toMatch(
+      'https://error-affirmations.netlify.app'
+    );
   });
   it('/api/v1/github signs out a user', async () => {
     const agent = request.agent(app);
