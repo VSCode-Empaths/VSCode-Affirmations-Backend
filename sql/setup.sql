@@ -9,8 +9,8 @@ CREATE TABLE users (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   email VARCHAR,
   password_hash VARCHAR NOT NULL,
-  first_name VARCHAR NOT NULL,
-  last_name VARCHAR NOT NULL
+  first_name VARCHAR,
+  last_name VARCHAR
 );
 
 CREATE TABLE github_users (
