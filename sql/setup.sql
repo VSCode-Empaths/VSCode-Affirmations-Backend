@@ -2,6 +2,23 @@
 -- The SQL in this file will be executed when you run `npm run setup-db`
 DROP TABLE IF EXISTS affirmations;
 DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS github_users CASCADE;
+
+CREATE TABLE users (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  email VARCHAR,
+  password_hash VARCHAR NOT NULL,
+  first_name VARCHAR NOT NULL,
+  last_name VARCHAR NOT NULL
+);
+
+CREATE TABLE github_users (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  login TEXT NOT NULL,
+  email TEXT,
+  avatar TEXT
+);
 
 CREATE TABLE categories (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -121,6 +138,3 @@ VALUES
 ('Take a deep breath!', 4),
 ('You can do amazing things!', 4),
 ('I am in control of my happiness. Not my errors.', 4);
-
-
-
