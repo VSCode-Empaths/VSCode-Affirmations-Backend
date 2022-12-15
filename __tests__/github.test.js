@@ -20,19 +20,11 @@ describe('github auth routes', () => {
     );
   });
 
-  it('/api/v1/github/callback should login users and redirect to netlify', async () => {
-    const res = await request
-      .agent(app)
-      .get('/api/v1/github/callback?code=42')
-      .redirects(1);
-    expect(res.body).toEqual({
-      id: expect.any(String),
-      login: 'lottie_dog',
-      email: 'lottie@lottie.com',
-      avatar: 'https://www.placecage.com/gif/300/300',
-      iat: expect.any(Number),
-      exp: expect.any(Number),
-    });
+  it('/api/v1/github/callback should login users and redirect to dashboards', async () => {
+    const res = await request.agent(app).get('/api/v1/github/callback?code=42');
+    expect(res.header.location).toMatch(
+      'https://error-affirmations.netlify.app'
+    );
   });
   it('/api/v1/github signs out a user', async () => {
     const agent = request.agent(app);
