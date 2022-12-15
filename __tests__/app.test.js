@@ -59,6 +59,7 @@ describe('affirmations and category routes', () => {
     const insertAffirmationRes = await request(app)
       .post('/api/v1/affirmations')
       .send(mockAffirmation);
+    expect(insertAffirmationRes.status).toBe(200);
     const res = await request(app).get(
       `/api/v1/affirmations/${insertAffirmationRes.body.id}`
     );
