@@ -1,0 +1,31 @@
+# Set `app` to a unique name, or run `fly launch` to generate.
+# Then: fly secrets set ... ; fly deploy
+
+app = "error-affirmations-api"
+primary_region = "sjc"
+
+# Match http_service.internal_port; Fly also sets PORT, but this guarantees it.
+[env]
+  PORT = "3000"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[http_service.checks]]
+  interval = "30s"
+  timeout = "5s"
+  grace_period = "5s"
+  method = "GET"
+  path = "/health"
+
+[[vm]]
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1

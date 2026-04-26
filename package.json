@@ -5,12 +5,11 @@
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "test": "jest --verbose --runInBand --testLocationInResults --setupFiles dotenv/config --passWithNoTests",
+    "test": "jest --verbose --runInBand --testLocationInResults --setupFiles ./lib/load-env.js --passWithNoTests",
     "test:watch": "npm run test -- --watch",
-    "start": "node -r dotenv/config server.js",
-    "start:watch": "nodemon -r dotenv/config server.js",
-    "setup-db": "node -r dotenv/config setup-db.js",
-    "setup-heroku": "heroku run npm run setup-db"
+    "start": "node -r ./lib/load-env.js server.js",
+    "start:watch": "nodemon -r ./lib/load-env.js server.js",
+    "setup-db": "node -r ./lib/load-env.js setup-db.js"
   },
   "jest": {
     "testEnvironment": "node"
