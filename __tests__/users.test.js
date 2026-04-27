@@ -58,6 +58,19 @@ describe('user routes', () => {
     expect(res.status).toEqual(200);
   });
 
+  it('sign-in uses the same error for unknown email and wrong password', async () => {
+    await request(app).post('/api/v1/users').send(mockUser);
+    const unknownEmail = await request(app)
+      .post('/api/v1/users/sessions')
+      .send({ email: 'nobody@example.com', password: '12345' });
+    const wrongPassword = await request(app)
+      .post('/api/v1/users/sessions')
+      .send({ email: 'test@example.com', password: 'wrong-password' });
+    expect(unknownEmail.status).toBe(wrongPassword.status);
+    expect(unknownEmail.body.message).toBe(wrongPassword.body.message);
+    expect(unknownEmail.body.message).toBe('Invalid credentials');
+  });
+
   it('/me should return a 401 if not authenticated', async () => {
     const res = await request(app).get('/api/v1/users/me');
     expect(res.status).toEqual(401);
@@ -85,6 +98,8 @@ describe('user routes', () => {
     const [agent] = await registerAndLogin({ email: 'admin' });
     const res = await agent.get('/api/v1/users/');
     expect(res.status).toEqual(200);
+    const json = JSON.stringify(res.body);
+    expect(json).not.toMatch(/password/i);
   });
 
   it('DELETE /sessions deletes the user session', async () => {

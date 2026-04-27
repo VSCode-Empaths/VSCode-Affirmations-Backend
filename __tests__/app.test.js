@@ -53,6 +53,43 @@ describe('affirmations and category routes', () => {
     expect(res.status).toBe(401);
   });
 
+  it('POST api/v1/affirmations should return 400 when text is missing', async () => {
+    await UserService.create({
+      firstName: 'Val',
+      lastName: 'User',
+      email: 'val-text@example.com',
+      password: '12345',
+    });
+    const agent = request.agent(app);
+    await agent.post('/api/v1/users/sessions').send({
+      email: 'val-text@example.com',
+      password: '12345',
+    });
+    const res = await agent
+      .post('/api/v1/affirmations')
+      .send({ text: '   ', category_id: '1' });
+    expect(res.status).toBe(400);
+  });
+
+  it('POST api/v1/affirmations should return 400 when category_id is invalid', async () => {
+    await UserService.create({
+      firstName: 'Val',
+      lastName: 'Cat',
+      email: 'val-cat@example.com',
+      password: '12345',
+    });
+    const agent = request.agent(app);
+    await agent.post('/api/v1/users/sessions').send({
+      email: 'val-cat@example.com',
+      password: '12345',
+    });
+    const res = await agent.post('/api/v1/affirmations').send({
+      text: 'Valid text',
+      category_id: '1.5',
+    });
+    expect(res.status).toBe(400);
+  });
+
   it('GET api/v1/categories should return a list of categories', async () => {
     const res = await request(app).get('/api/v1/categories');
     expect(res.status).toBe(200);
