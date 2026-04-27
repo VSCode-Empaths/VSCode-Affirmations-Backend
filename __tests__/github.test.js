@@ -22,9 +22,10 @@ describe('github auth routes', () => {
 
   it('/api/v1/github/callback should login users and redirect to dashboards', async () => {
     const res = await request.agent(app).get('/api/v1/github/callback?code=42');
-    expect(res.header.location).toMatch(
-      'https://error-affirmations.netlify.app'
-    );
+    const expectedRedirect =
+      process.env.REDIRECT_URL ||
+      'https://error-affirmations-v2.netlify.app';
+    expect(res.header.location).toMatch(expectedRedirect);
   });
   it('/api/v1/github signs out a user', async () => {
     const agent = request.agent(app);

@@ -35,7 +35,7 @@
 1. **Supabase project** — Create if needed. Apply schema: **SQL Editor** → run `sql/setup.sql`, *or* `npm run setup-db` with `DATABASE_URL` (and `PGSSLMODE` if needed) in **`.env` / `.env.local`**. For **first-time empty DB**, full setup is correct (script may `DROP` then recreate).  
 2. **Connection string** — Prefer **Session pooler URI** if **Direct** fails locally (e.g. IPv6). Ensure **real DB password** is in the URI (not a placeholder). Same string will go to **Fly secrets** for production.  
 3. **Fly app name** — Ensure **`fly.toml` `app`** is globally unique; create app if needed (`fly apps create <name>` or `fly launch`).  
-4. **Fly secrets** — Set everything the app needs (at minimum `DATABASE_URL`, `PGSSLMODE=require` if you use it, `JWT_SECRET`, `SALT_ROUNDS`, `COOKIE_NAME`, `SECURE_COOKIES`, `GH_*`, `REDIRECT_URL`, **`API_URL=https://<app>.fly.dev`**, etc.). **Do not commit secrets;** `fly secrets set` locally or via CI. **Do not set `PORT` in secrets** — Fly sets it to match the service.  
+4. **Fly secrets** — Set everything the app needs (at minimum `DATABASE_URL`, `PGSSLMODE=require` if you use it, `JWT_SECRET`, `SALT_ROUNDS`, `COOKIE_NAME`, **`SECURE_COOKIES=true`** (required when the web app is on another HTTPS origin so session cookies are sent on credentialed API calls; if omitted/false, GitHub OAuth can appear to work while `/api/v1/users/me` returns **401**), `GH_*`, `REDIRECT_URL`, **`API_URL=https://<app>.fly.dev`**, etc.). **Do not commit secrets;** `fly secrets set` locally or via CI. **Do not set `PORT` in secrets** — Fly sets it to match the service.  
 5. **Deploy** — `fly deploy` from repo root.  
 6. **CORS** — Add production **`https://<app>.fly.dev`** to `origin` in `lib/app.js`, redeploy.  
 7. **GitHub OAuth app** — Update **authorization callback** URL(s) to the new API.  
@@ -69,6 +69,7 @@
 - **Prod DB from Fly:** Often **Direct** works even when a laptop had issues; if not, switch secret to **Session pooler** URI.  
 - **Health check failing:** Ensure **`GET /health`** is registered **before** heavy middleware and returns 200 without DB.  
 - **CORS or OAuth:** New API hostname must be in **CORS `origin`**, **GitHub callback**, and **client `API_URL`**.
+- **401 on `/users/me` after GitHub login:** On Fly, set **`SECURE_COOKIES=true`** and redeploy. The SPA on Netlify calls the API cross-site; `SameSite=Lax` cookies are not sent on those requests, so the session never reaches `/api/v1/users/me`.
 
 ---
 
