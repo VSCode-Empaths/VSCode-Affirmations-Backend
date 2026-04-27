@@ -24,6 +24,13 @@ const registerAndLogin = async (userProps = {}) => {
 };
 
 describe('user routes', () => {
+  const prevAdminEmails = process.env.ADMIN_EMAILS;
+  beforeAll(() => {
+    process.env.ADMIN_EMAILS = 'admin';
+  });
+  afterAll(() => {
+    process.env.ADMIN_EMAILS = prevAdminEmails;
+  });
   beforeEach(() => {
     return setup(pool);
   });
@@ -51,15 +58,21 @@ describe('user routes', () => {
     expect(res.status).toEqual(200);
   });
 
-  it('/protected should return a 401 if not authenticated', async () => {
-    const res = await request(app).get('/api/v1/users/protected');
+  it('/me should return a 401 if not authenticated', async () => {
+    const res = await request(app).get('/api/v1/users/me');
     expect(res.status).toEqual(401);
   });
 
-  it('/protected should return the current user if authenticated', async () => {
-    const [agent] = await registerAndLogin();
-    const res = await agent.get('/api/v1/users/protected');
+  it('/me should return the current user if authenticated', async () => {
+    const [agent, user] = await registerAndLogin();
+    const res = await agent.get('/api/v1/users/me');
     expect(res.status).toEqual(200);
+    expect(res.body).toMatchObject({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    });
   });
 
   it('/users should return 403 if user not admin', async () => {
@@ -68,23 +81,7 @@ describe('user routes', () => {
     expect(res.status).toEqual(403);
   });
 
-  it('/users should return 200 if user is admin', async () => {
-    const agent = request.agent(app);
-
-    await agent.post('/api/v1/users').send({
-      email: 'admin',
-      password: '1234',
-      firstName: 'admin',
-      lastName: 'admin',
-    });
-    await agent
-      .post('/api/v1/users/sessions')
-      .send({ email: 'admin', password: '1234' });
-    const res = await agent.get('/api/v1/users/');
-    expect(res.status).toEqual(200);
-  });
-
-  it('/users should return a 200 if user is admin', async () => {
+  it('/users should return 200 for admin (ADMIN_EMAILS match)', async () => {
     const [agent] = await registerAndLogin({ email: 'admin' });
     const res = await agent.get('/api/v1/users/');
     expect(res.status).toEqual(200);
