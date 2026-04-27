@@ -38,6 +38,8 @@ CREATE TABLE affirmations (
     text VARCHAR(255),
     category_id BIGINT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    user_id BIGINT REFERENCES users(id),
+    github_user_id BIGINT REFERENCES github_users(id),
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
